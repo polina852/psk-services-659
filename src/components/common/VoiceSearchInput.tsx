@@ -136,8 +136,9 @@ export function VoiceSearchInput({
 
   // Memoize suggestions to prevent unnecessary re-renders
   const memoizedSuggestions = React.useMemo(() => {
-    return [...suggestions, ...getDefaultSuggestions()];
-  }, [suggestions, getDefaultSuggestions]);
+    const defaultSugs = getDefaultSuggestions();
+    return [...suggestions, ...defaultSugs];
+  }, [suggestions]);
 
   // Filtrer les suggestions
   useEffect(() => {
