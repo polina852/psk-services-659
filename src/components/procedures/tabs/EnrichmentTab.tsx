@@ -8,6 +8,7 @@ import { AIAutoFillModal } from '@/components/ai/AIAutoFillModal';
 import { ApiImportModal } from '@/components/modals/ApiImportModal';
 import { BatchImportModal } from '@/components/modals/BatchImportModal';
 import { useApiModalHandler } from '@/hooks/useApiModalHandler';
+import { useUnifiedModalContext } from '@/components/modals/unified/UnifiedModalProvider';
 
 interface EnrichmentTabProps {
   onAddProcedure: () => void;
@@ -17,8 +18,9 @@ interface EnrichmentTabProps {
 
 export function EnrichmentTab({ onAddProcedure, onOCRTextExtracted, onOCRDataExtracted }: EnrichmentTabProps) {
   const [showOCRScanner, setShowOCRScanner] = useState(false);
-  const { isModalOpen, context, openModal, closeModal, handleDataGenerated } = useAIAutoFill();
+  const { isModalOpen, context, openModal: openAIModal, closeModal, handleDataGenerated } = useAIAutoFill();
   const { showApiModal, apiContext, openApiModal, closeApiModal } = useApiModalHandler();
+  const { openModal } = useUnifiedModalContext();
 
   const handleOCRExtracted = (text: string) => {
     console.log('Texte OCR extrait pour procédure:', text);
@@ -83,18 +85,11 @@ export function EnrichmentTab({ onAddProcedure, onOCRTextExtracted, onOCRDataExt
   };
 
   const handleAutoFill = () => {
-    openModal('procedure');
+    openAIModal('procedure');
   };
 
   const handleAutoExtraction = () => {
-    const event = new CustomEvent('open-modal', {
-      detail: {
-        type: 'extraction',
-        title: 'Extraction automatique',
-        data: { feature: 'auto-extraction', context: 'procedures' }
-      }
-    });
-    window.dispatchEvent(event);
+    openModal('autoExtraction', { context: 'procedures' });
   };
 
   const handleApiImport = () => {

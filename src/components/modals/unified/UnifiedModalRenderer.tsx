@@ -11,6 +11,7 @@ import { AdvancedSearchModal } from '../AdvancedSearchModal';
 import { ManagementModal } from '../ManagementModal';
 import { AlertManagementModal } from '../AlertManagementModal';
 import { UserManagementModal } from '../UserManagementModal';
+import { AutoExtractionModal } from '../specialized/AutoExtractionModal';
 
 export function UnifiedModalRenderer() {
   const { modals, closeModal } = useUnifiedModalContext();
@@ -103,6 +104,13 @@ export function UnifiedModalRenderer() {
           console.log('User saved:', userData);
           closeModal('userManagement');
         }}
+      />
+
+      <AutoExtractionModal
+        isOpen={modals.autoExtraction?.isOpen || false}
+        onClose={() => closeModal('autoExtraction')}
+        context={modals.autoExtraction?.data?.context || 'procedures'}
+        data={modals.autoExtraction?.data}
       />
     </>
   );

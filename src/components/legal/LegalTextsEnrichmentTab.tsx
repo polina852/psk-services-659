@@ -8,6 +8,7 @@ import { ApiImportModal } from '@/components/modals/ApiImportModal';
 import { AIAutoFillModal } from '@/components/ai/AIAutoFillModal';
 import { BatchImportModal } from '@/components/modals/BatchImportModal';
 import { useApiModalHandler } from '@/hooks/useApiModalHandler';
+import { useUnifiedModalContext } from '@/components/modals/unified/UnifiedModalProvider';
 
 interface LegalTextsEnrichmentTabProps {
   onAddLegalText: () => void;
@@ -19,6 +20,7 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted, on
   const [showOCRScanner, setShowOCRScanner] = useState(false);
   const actions = useGlobalActions();
   const { showApiModal, apiContext, openApiModal, closeApiModal } = useApiModalHandler();
+  const { openModal } = useUnifiedModalContext();
 
   const handleOCRExtracted = (text: string) => {
     console.log('Texte OCR extrait:', text);
@@ -92,6 +94,10 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted, on
     openApiModal('legal-texts');
   };
 
+  const handleAutoExtraction = () => {
+    openModal('autoExtraction', { context: 'legal-texts' });
+  };
+
   if (showOCRScanner) {
     console.log('🎯 [LegalTextsEnrichmentTab] Affichage du scanner OCR');
     return (
@@ -135,6 +141,14 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted, on
       buttonText: "Auto-remplissage",
       color: "purple",
       onClick: handleAutoFill
+    },
+    {
+      icon: Database,
+      title: "Extraction automatique",
+      description: "Extraire automatiquement des textes juridiques depuis diverses sources",
+      buttonText: "Extraction auto",
+      color: "orange",
+      onClick: handleAutoExtraction
     },
     {
       icon: Settings,
@@ -198,7 +212,7 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted, on
       {/* Autres options d'enrichissement */}
       <div>
         <h3 className="text-xl font-semibold text-gray-900 mb-6">Options d'enrichissement avancées</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {actionsConfig.slice(2).map((action, index) => (
             <Card key={index + 2} className="hover:shadow-md transition-shadow cursor-pointer border-gray-200" onClick={action.onClick}>
               <CardHeader className="text-center">
