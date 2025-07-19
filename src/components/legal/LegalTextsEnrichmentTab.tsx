@@ -7,6 +7,7 @@ import { useGlobalActions } from '@/hooks/useGlobalActions';
 import { ApiImportModal } from '@/components/modals/ApiImportModal';
 import { AIAutoFillModal } from '@/components/ai/AIAutoFillModal';
 import { BatchImportModal } from '@/components/modals/BatchImportModal';
+import { AutoExtractionModal } from '@/components/extraction/AutoExtractionModal';
 import { useApiModalHandler } from '@/hooks/useApiModalHandler';
 
 interface LegalTextsEnrichmentTabProps {
@@ -68,6 +69,7 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted, on
 
   const [showAutoFill, setShowAutoFill] = useState(false);
   const [showBatchImport, setShowBatchImport] = useState(false);
+  const [showAutoExtraction, setShowAutoExtraction] = useState(false);
 
   const handleAutoFill = () => {
     setShowAutoFill(true);
@@ -103,6 +105,10 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted, on
     );
   }
 
+  const handleAutoExtraction = () => {
+    setShowAutoExtraction(true);
+  };
+
   const actionsConfig = [
     {
       icon: Plus,
@@ -127,6 +133,14 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted, on
       buttonText: "Import CSV/Excel",
       color: "blue",
       onClick: handleBatchImport
+    },
+    {
+      icon: Database,
+      title: "Extraction automatique",
+      description: "Extraire automatiquement des textes depuis diverses sources",
+      buttonText: "Extraction auto",
+      color: "orange",
+      onClick: handleAutoExtraction
     },
     {
       icon: Wand2,
@@ -198,7 +212,7 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted, on
       {/* Autres options d'enrichissement */}
       <div>
         <h3 className="text-xl font-semibold text-gray-900 mb-6">Options d'enrichissement avancées</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {actionsConfig.slice(2).map((action, index) => (
             <Card key={index + 2} className="hover:shadow-md transition-shadow cursor-pointer border-gray-200" onClick={action.onClick}>
               <CardHeader className="text-center">
@@ -239,6 +253,12 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted, on
       <BatchImportModal
         isOpen={showBatchImport}
         onClose={() => setShowBatchImport(false)}
+        context="legal-texts"
+      />
+
+      <AutoExtractionModal
+        isOpen={showAutoExtraction}
+        onClose={() => setShowAutoExtraction(false)}
         context="legal-texts"
       />
     </div>

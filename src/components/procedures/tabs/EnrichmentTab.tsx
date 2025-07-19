@@ -7,6 +7,7 @@ import { useAIAutoFill } from '@/hooks/useAIAutoFill';
 import { AIAutoFillModal } from '@/components/ai/AIAutoFillModal';
 import { ApiImportModal } from '@/components/modals/ApiImportModal';
 import { BatchImportModal } from '@/components/modals/BatchImportModal';
+import { AutoExtractionModal } from '@/components/extraction/AutoExtractionModal';
 import { useApiModalHandler } from '@/hooks/useApiModalHandler';
 
 interface EnrichmentTabProps {
@@ -86,15 +87,10 @@ export function EnrichmentTab({ onAddProcedure, onOCRTextExtracted, onOCRDataExt
     openModal('procedure');
   };
 
+  const [showAutoExtraction, setShowAutoExtraction] = useState(false);
+
   const handleAutoExtraction = () => {
-    const event = new CustomEvent('open-modal', {
-      detail: {
-        type: 'extraction',
-        title: 'Extraction automatique',
-        data: { feature: 'auto-extraction', context: 'procedures' }
-      }
-    });
-    window.dispatchEvent(event);
+    setShowAutoExtraction(true);
   };
 
   const handleApiImport = () => {
@@ -254,6 +250,12 @@ export function EnrichmentTab({ onAddProcedure, onOCRTextExtracted, onOCRDataExt
         onClose={() => setShowBatchImport(false)}
         context="procedures"
         onImportComplete={handleBatchImportComplete}
+      />
+
+      <AutoExtractionModal
+        isOpen={showAutoExtraction}
+        onClose={() => setShowAutoExtraction(false)}
+        context="procedures"
       />
     </div>
   );
